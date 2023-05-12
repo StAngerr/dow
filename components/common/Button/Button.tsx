@@ -1,35 +1,47 @@
-import React from "react";
+import React, { useMemo } from "react";
 
-export type ButtonType = "primary" | "default";
+export type ButtonType = "primary" | "secondary" | "default" | "link";
 
 export interface Props extends React.HTMLProps<HTMLButtonElement> {
   type?: ButtonType;
   children?: React.ReactNode;
+
+  href?: string;
 }
 
-export const Button = ({ children, type = "default", ...props }: Props) => {
-  switch (type) {
-    case "primary":
-      return (
-        <button
-          {...props}
-          className={
-            "px-4 h-8 transition rounded bg-blue-400 text-white hover:bg-white hover:text-blue-400 border border-blue-400 dark:bg-blue-800"
-          }
-        >
-          {children}
-        </button>
-      );
-    default:
-      return (
-        <button
-          {...props}
-          className={
-            "mr-4 px-4 h-8 transition rounded border border-white hover:border-slate-400 hover:text-slate-700 text-slate-400 dark:bg-violet-600 dark:text-white"
-          }
-        >
-          {children}
-        </button>
-      );
+export const Button = ({
+  children,
+  type = "default",
+  href = "",
+  ...props
+}: Props) => {
+  const buttonClasses = useMemo(() => {
+    if (type === "primary") {
+      return "bg-primary text-white px-4 hover:bg-button-hover py-2 rounded-md";
+    }
+    if (type === "secondary") {
+      return "border-2 border-button-default text-button-default hover:bg-button-hover hover:text-white px-4 py-2 rounded-md";
+    }
+  }, [type]);
+
+  if (type === "link") {
+    return (
+      <a
+        {...props}
+        href={href}
+        className="text-link-default hover:text-link-hover transition-colors duration-300 ease-in-out"
+      >
+        {children}
+      </a>
+    );
   }
+
+  return (
+    <button
+      {...props}
+      className={"transition-colors duration-300 ease-in-out " + buttonClasses}
+    >
+      {children}
+    </button>
+  );
 };

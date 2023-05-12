@@ -4,6 +4,10 @@ import { Button } from "../common/Button/Button";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../constants";
+import { Heading } from "../common/Heading/Heading";
+import { DarkModeToggle } from "../common/DarkModeToggle/DarkModeToggle";
+import { SearchInput } from "../common/SearchInput/SearchInput";
+import classNames from "classnames";
 
 interface Props {
   currentDate: Date;
@@ -21,23 +25,22 @@ export const SearchPanel = ({
   };
 
   const DateSelectBtn = forwardRef(({ value, onClick }, ref) => (
-    <Button
-      type={"primary"}
-      className="example-custom-input"
-      onClick={onClick}
-      ref={ref}
-    >
+    <Button type={"primary"} onClick={onClick} ref={ref}>
       {value}
     </Button>
   ));
 
   return (
-    <div className={className}>
-      <DatePicker
-        selected={currentDate}
-        onChange={handleDateChange}
-        customInput={<DateSelectBtn />}
-      />
+    <div className={classNames(className, "flex align-middle justify-center")}>
+      <label>
+        <span>Date: </span>
+        <DatePicker
+          selected={currentDate}
+          onChange={handleDateChange}
+          customInput={<DateSelectBtn />}
+        />
+      </label>
+      <SearchInput className={"my-2"} placeholder={"Search"} />
     </div>
   );
 };

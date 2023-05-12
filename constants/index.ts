@@ -1,5 +1,5 @@
 export const TODAY = {
-  date: new Date(),
+  date: new Date('2023-01-15'),
   dateStr: "today_default",
 };
 
