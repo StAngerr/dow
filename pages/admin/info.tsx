@@ -1,9 +1,12 @@
 import { Heading } from "../../components/common/Heading/Heading";
 import DatePicker from "react-datepicker";
 import Calendar, { CalendarTileProperties } from "react-calendar";
-import React from "react";
+import React, { useCallback } from "react";
 import { format } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../constants";
+import { JobsList } from "../../components/Admin/JobsList/JobsList";
+import { NewScrapTaskForm } from "../../components/Admin/NewScrapTaskForm/NewScrapTaskForm";
+import { runNewTask } from "../../api/scrappers/scrappers.api";
 
 interface Props {
   days: string[];
@@ -18,6 +21,10 @@ export const AdminRoot = ({ days, stats }: Props) => {
     return view === "month" && date.getDate() !== new Date().getDate();
   };
 
+  const handleRunNewTask = useCallback((start: string, end: string) => {
+    runNewTask(start, end);
+  }, []);
+
   const tileClassName = ({ date, view }: CalendarTileProperties) => {
     console.log(
       format(date, DEFAULT_DATE_FORMAT),
@@ -28,8 +35,6 @@ export const AdminRoot = ({ days, stats }: Props) => {
     }
   };
 
-  console.log(days);
-
   return (
     <div className={"p-5"}>
       <Heading level={"2"}>Current day</Heading>
@@ -37,6 +42,8 @@ export const AdminRoot = ({ days, stats }: Props) => {
       <Heading level={"2"}>Loaded days:</Heading>
       <p>{`${stats.totalFilledDays} out of ${stats.totalDays}`}</p>
       <Calendar tileDisabled={tileDisabled} tileClassName={tileClassName} />
+      <NewScrapTaskForm onCreateNewTask={handleRunNewTask} />
+      <JobsList />
     </div>
   );
 };

@@ -24,14 +24,6 @@ export default function SingleDayArchive({ data }: Props) {
     });
   };
 
-  //TEST IO
-  useEffect(() => {
-    const socket = io("http://localhost:3001", { transports: ["websocket"] });
-    window.test = socket;
-    // socket.timeout(2000).emit("client-message", "Hello from client");
-    console.log("socket", socket);
-  }, []);
-
   useEffect(() => {
     const { date } = router.query as unknown as QueryObj;
     if (date && date.toLowerCase() === "today") {
