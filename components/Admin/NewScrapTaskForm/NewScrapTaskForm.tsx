@@ -14,13 +14,12 @@ export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
   const [isOpened, setIsOpened] = useState(false);
   const [selectedRange, setSelectedRange] = useState<[Date, Date] | null>(null);
 
-  const handleDateChange = useCallback((d) => {
-    setSelectedRange(d);
+  const handleDateChange = useCallback((values: [Date] | [Date, Date]) => {
+    setSelectedRange(values as [Date, Date]);
   }, []);
 
   const tileClassName = useCallback(
     ({ date }: CalendarTileProperties) => {
-      console.log(selectedRange);
       return selectedRange &&
         date >= selectedRange[0] &&
         date <= selectedRange[1]
@@ -36,50 +35,64 @@ export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
         format(selectedRange[0], DEFAULT_DATE_FORMAT),
         format(selectedRange[1], DEFAULT_DATE_FORMAT)
       );
+      setIsOpened(false);
     }
-  }, [onCreateNewTask]);
+  }, [onCreateNewTask, selectedRange]);
 
   const createNewTaskForm = useMemo(() => {
+    const selectedFrom = selectedRange
+      ? format(selectedRange[0], DEFAULT_DATE_FORMAT)
+      : "-";
+    const selectedTo = selectedRange
+      ? format(selectedRange[1], DEFAULT_DATE_FORMAT)
+      : "-";
     return (
-      <Modal className={"px-16 py-12"} onClose={() => setIsOpened(false)}>
-        <div>
-          <Heading className={"mb-3"} level={"3"}>
-            Select range to scrap
-          </Heading>
+      <div>
+        <Heading className={"mb-3"} level={"3"}>
+          Select range to scrap
+        </Heading>
 
-          <p className={"mb-7"}>{`Selected date from ${
-            selectedRange ? format(selectedRange[0], DEFAULT_DATE_FORMAT) : "-"
-          } to ${
-            selectedRange ? format(selectedRange[1], DEFAULT_DATE_FORMAT) : "-"
-          }`}</p>
+        <p className={"mb-7"}>
+          Selected date from <b>{selectedFrom}</b> to <b>{selectedTo}</b>
+        </p>
 
-          <Calendar
-            className={"mb-7"}
-            tileClassName={tileClassName}
-            selectRange
-            onChange={handleDateChange}
-          />
-
-          <div>
-            <Button type={"secondary"} onClick={() => setIsOpened(false)}>
-              Cancel
-            </Button>
-            <Button
-              disabled={!selectedRange}
-              type={"primary"}
-              onClick={handleCreateNewTask}
-            >
-              Run
-            </Button>
-          </div>
+        <Calendar
+          tileClassName={tileClassName}
+          selectRange
+          onChange={handleDateChange}
+          value={selectedRange}
+        />
+        <Button
+          className={"block mb-7"}
+          type={"link"}
+          disabled={!selectedRange}
+          onClick={() => setSelectedRange(null)}
+        >
+          Clear selection
+        </Button>
+        <div className={"flex justify-between"}>
+          <Button type={"secondary"} onClick={() => setIsOpened(false)}>
+            Cancel
+          </Button>
+          <Button
+            disabled={!selectedRange}
+            type={"primary"}
+            onClick={handleCreateNewTask}
+          >
+            Run
+          </Button>
         </div>
-      </Modal>
+      </div>
     );
-  }, [onCreateNewTask, tileClassName, handleDateChange]);
+  }, [onCreateNewTask, tileClassName, handleDateChange, selectedRange]);
 
   return (
     <>
-      {isOpened && createNewTaskForm}
+      {isOpened && (
+        <Modal className={"px-16 py-12"} onClose={() => setIsOpened(false)}>
+          {createNewTaskForm}
+        </Modal>
+      )}
       <Button type={"primary"} onClick={() => setIsOpened(true)}>
         Collect data
       </Button>

@@ -1,31 +1,8 @@
 import { useEffect, useState } from "react";
 import { allTasks } from "../../../api/scrappers/scrappers.urls";
+import { Task, TaskStatus } from "../../../types/tasks";
 
-const taskData = [
-  {
-    id: 1,
-    from: "2022-05-15",
-    to: "2022-05-20",
-    status: "in progress",
-    startedDate: "2022-05-15",
-  },
-  {
-    id: 2,
-    from: "2022-05-12",
-    to: "2022-05-14",
-    status: "failed",
-    startedDate: "2022-05-12",
-  },
-  {
-    id: 3,
-    from: "2022-05-21",
-    to: "2022-05-24",
-    status: "success",
-    startedDate: "2022-05-21",
-  },
-];
-
-const statusColors = {
+const statusColors: { [key in TaskStatus]: string } = {
   "in progress": "text-blue-400",
   failed: "text-red-300",
   success: "text-green-500",
@@ -46,7 +23,7 @@ const columnsConfig = [
 ];
 
 export const JobsList = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const columns = columnsConfig.map((column) => (
     <th key={column.label} className="p-2 font-bold  text-text">
@@ -62,8 +39,6 @@ export const JobsList = () => {
     });
   }, []);
 
-  console.log(tasks);
-
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full table-auto mt-2.5">
@@ -71,7 +46,7 @@ export const JobsList = () => {
           <tr className="text-left bg-accent1 ">{columns}</tr>
         </thead>
         <tbody className={"bg-bg2"}>
-          {taskData.map((task) => (
+          {tasks.map((task: Task) => (
             <tr key={task.id}>
               <td className="p-2">{task.id}</td>
               <td className="p-2">
@@ -86,7 +61,7 @@ export const JobsList = () => {
                 {task.status}
               </td>
               <td className="p-2">
-                {new Date(task.startedDate).toLocaleDateString()}
+                {new Date(task.startedAt).toLocaleDateString()}
               </td>
             </tr>
           ))}

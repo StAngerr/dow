@@ -1,35 +1,53 @@
 import React, { useMemo } from "react";
+import classNames from "classnames";
 
 export type ButtonType = "primary" | "secondary" | "default" | "link";
 
 export interface Props extends React.HTMLProps<HTMLButtonElement> {
   type?: ButtonType;
   children?: React.ReactNode;
-
+  className?: string;
   href?: string;
+  disabled?: boolean;
 }
 
 export const Button = ({
   children,
   type = "default",
   href = "",
+  className = "",
+  disabled = false,
   ...props
 }: Props) => {
   const buttonClasses = useMemo(() => {
     if (type === "primary") {
-      return "bg-primary text-white px-4 hover:bg-button-hover py-2 rounded-md";
+      return `bg-primary text-white px-4 ${
+        !disabled ? "hover:bg-button-hover" : ""
+      } py-2 rounded-md`;
     }
     if (type === "secondary") {
-      return "border-2 border-button-default text-button-default hover:bg-button-hover hover:text-white px-4 py-2 rounded-md";
+      return `border-2 border-button-default text-button-default ${
+        !disabled ? "hover:bg-button-hover" : ""
+      } hover:text-white px-4 py-2 rounded-md`;
     }
-  }, [type]);
+  }, [type, disabled]);
+
+  const disabledStyles = useMemo(
+    () => (disabled ? "opacity-70 hover:" : ""),
+    [disabled]
+  );
 
   if (type === "link") {
     return (
       <a
         {...props}
-        href={href}
-        className="text-link-default hover:text-link-hover transition-colors duration-300 ease-in-out"
+        href={href || undefined}
+        className={classNames(
+          "text-link-default hover:text-link-hover transition-colors duration-300 ease-in-out",
+          className,
+          disabledStyles,
+          disabledStyles ? "hover:text-link-default" : ""
+        )}
       >
         {children}
       </a>
@@ -39,7 +57,12 @@ export const Button = ({
   return (
     <button
       {...props}
-      className={"transition-colors duration-300 ease-in-out " + buttonClasses}
+      className={classNames(
+        "transition-colors duration-300 ease-in-out",
+        buttonClasses,
+        className,
+        disabledStyles
+      )}
     >
       {children}
     </button>
