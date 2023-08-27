@@ -5,12 +5,16 @@ import Calendar, { CalendarTileProperties } from "react-calendar";
 import { Heading } from "../../common/Heading/Heading";
 import { format } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../../constants";
+import { useAtom } from "jotai";
+import { articlesAtom } from "../../../atoms/articles.atom";
+import classNames from "classnames";
 
 interface Props {
   onCreateNewTask: (from: string, to: string) => void;
 }
 
 export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
+  const [days] = useAtom(articlesAtom);
   const [isOpened, setIsOpened] = useState(false);
   const [selectedRange, setSelectedRange] = useState<[Date, Date] | null>(null);
 
@@ -20,13 +24,17 @@ export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
 
   const tileClassName = useCallback(
     ({ date }: CalendarTileProperties) => {
-      return selectedRange &&
-        date >= selectedRange[0] &&
-        date <= selectedRange[1]
-        ? "bg-primary text-white"
+      const activeClassName = days.includes(format(date, DEFAULT_DATE_FORMAT))
+        ? "!bg-green-500"
         : "";
+      const selectedClassName =
+        selectedRange && date >= selectedRange[0] && date <= selectedRange[1]
+          ? "bg-primary text-white"
+          : "";
+
+      return classNames(activeClassName, selectedClassName);
     },
-    [selectedRange]
+    [selectedRange, days]
   );
 
   const handleCreateNewTask = useCallback(() => {
@@ -64,19 +72,19 @@ export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
         />
         <Button
           className={"block mb-7"}
-          type={"link"}
+          color={"link"}
           disabled={!selectedRange}
           onClick={() => setSelectedRange(null)}
         >
           Clear selection
         </Button>
         <div className={"flex justify-between"}>
-          <Button type={"secondary"} onClick={() => setIsOpened(false)}>
+          <Button color={"secondary"} onClick={() => setIsOpened(false)}>
             Cancel
           </Button>
           <Button
             disabled={!selectedRange}
-            type={"primary"}
+            color={"primary"}
             onClick={handleCreateNewTask}
           >
             Run
@@ -93,7 +101,7 @@ export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
           {createNewTaskForm}
         </Modal>
       )}
-      <Button type={"primary"} onClick={() => setIsOpened(true)}>
+      <Button color={"primary"} onClick={() => setIsOpened(true)}>
         Collect data
       </Button>
     </>

@@ -10,7 +10,7 @@ export const SearchInput = ({ placeholder, onChange, className }: Props) => {
   return (
     <input
       className={classNames(
-        "py-2 px-5 text-text border-primary outline-primary rounded",
+        "py-2 px-5 text-text border-primary outline-primary rounded border",
         className
       )}
       type="text"

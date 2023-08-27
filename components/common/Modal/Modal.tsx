@@ -5,7 +5,6 @@ import classNames from "classnames";
 interface Props {
   children: React.ReactNode;
   onClose: () => void;
-
   containerClassName?: string;
   className?: string;
 }

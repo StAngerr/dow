@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@next/font": "13.1.1",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
@@ -19,6 +20,7 @@
     "date-fns": "^2.29.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
+    "formik": "^2.4.3",
     "jotai": "^1.13.1",
     "next": "13.1.1",
     "postcss": "^8.4.21",

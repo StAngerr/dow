@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { SingleDayPage } from "../../components/SingleDayPage/SingelDayPage";
 import { SingleDaySearchPanel } from "../../components/SingleDayPage/SingleDaySearchPanel/SingleDaySearchPanel";
 import { io } from "socket.io-client";
+import { rootUrl } from "../../api";
 
 interface Props {
   data: Article[];
@@ -54,10 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: { data: context.query } };
   }
   const resp = await fetch(
-    `http://localhost:3001/data/articles/${format(
-      parsedDate,
-      DEFAULT_DATE_FORMAT
-    )}`
+    `${rootUrl}/data/articles/${format(parsedDate, DEFAULT_DATE_FORMAT)}`
   );
   const articles = await resp.json();
   return {

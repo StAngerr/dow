@@ -3,8 +3,6 @@ import React, { useEffect } from "react";
 import Socket from "../socket";
 
 export default function Home() {
-  useEffect(() => Socket.init(), []);
-
   return (
     <>
       <Head>

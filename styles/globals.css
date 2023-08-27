@@ -115,3 +115,9 @@ a {
     color-scheme: dark;
   }
 }
+
+.app-icon-size {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}

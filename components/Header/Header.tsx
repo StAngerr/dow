@@ -30,10 +30,10 @@ export const Header = () => {
       </nav>
       <div className={"flex"}>
         <DarkModeToggle />
-        <Button type="secondary" className="mr-2">
+        <Button color="secondary" className="mr-2">
           Login
         </Button>
-        <Button type="primary">Logout</Button>
+        <Button color="primary">Logout</Button>
       </div>
     </header>
   );

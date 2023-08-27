@@ -25,7 +25,7 @@ export const SearchPanel = ({
   };
 
   const DateSelectBtn = forwardRef(({ value, onClick }, ref) => (
-    <Button type={"primary"} onClick={onClick} ref={ref}>
+    <Button color={"primary"} onClick={onClick} ref={ref}>
       {value}
     </Button>
   ));

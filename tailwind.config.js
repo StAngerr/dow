@@ -8,6 +8,10 @@ module.exports = {
     "./components/**/*.tsx",
     "./components/**/*.ts",
   ],
+  purge: [
+    // Other purge options...
+    "./components/**/*.tsx", // Include dynamic classes in components
+  ],
   theme: {
     extend: {
       colors: {
@@ -16,6 +20,7 @@ module.exports = {
         button: {
           default: "#518c9c",
           hover: "#6da5b5",
+          hoverLighten: "#a6ccd4",
         },
         link: {
           default: "#4e8c9c",

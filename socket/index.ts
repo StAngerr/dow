@@ -1,13 +1,18 @@
 import { io, Socket as SocketIo } from "socket.io-client";
+import { rootUrl } from "../api";
 
 class Socket {
-  private URL = "http://localhost:3001";
+  private URL = rootUrl;
   private socket: SocketIo | null = null;
+  private inited = false;
 
   private status: "connected" | "disconnected" = "disconnected";
 
   init() {
+    if (this.inited) return false;
+
     this.socket = io(this.URL, { transports: ["websocket"] });
+    this.inited = true;
 
     this.socket.on("connect", () => {
       this.status = "connected";
@@ -19,10 +24,10 @@ class Socket {
   }
 
   subscribeToEvent(event: string, callback: (data: any) => void) {
-    this.socket?.on(event, callback);
+    return this.socket?.on(event, callback);
   }
 
-  getInstanse(): SocketIo | null {
+  getInstance(): SocketIo | null {
     return this.socket;
   }
 
