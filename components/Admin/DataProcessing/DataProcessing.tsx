@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { articlesAtom } from "../../../atoms/articles.atom";
 import { addDays, format, subDays } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../../constants";
-import { getArticlesByDate } from "../../../api/days/articles.api";
+import { getArticlesByDate } from "../../../api/articles/articles.api";
 import { ArticlesTable } from "./ArticlesTable/ArticlesTable";
 import { EditArticleForm } from "./EditArticleForm/EditArticleForm";
 import {

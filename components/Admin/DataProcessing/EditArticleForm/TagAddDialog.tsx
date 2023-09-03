@@ -4,7 +4,11 @@ import { Tag } from "../../../../types/tags";
 import { Button } from "../../../common/Button/Button";
 import { Heading } from "../../../common/Heading/Heading";
 import { TagComp } from "../../../common/TagComp/TagComp";
-import { SearchInput } from "../../../common/SearchInput/SearchInput";
+import {
+  SearchInput,
+  SearchInputItem,
+} from "../../../common/SearchInput/SearchInput";
+import { createNewTag, getAllTags } from "../../../../api/tags/tags.api";
 
 interface Props {
   currentTags: Tag[];
@@ -17,8 +21,12 @@ export const TagAddDialog = ({
   handleSave,
   handleClose,
 }: Props) => {
-  const [tags, setTags] = useState(currentTags);
+  const [tags, setTags] = useState<Tag[]>(currentTags);
   const [isCreateNewTag, setIsCreateNewTag] = useState(false);
+  const [createNewTagError, setCreateNewTagError] = useState<string | null>(
+    null
+  );
+  const [newTagLabel, setNewTagLabel] = useState<string>("");
   const handleDeleteTag = useCallback((tag: Tag) => {
     setTags((prev) => prev.filter((i) => i.id !== tag.id));
   }, []);
@@ -28,8 +36,39 @@ export const TagAddDialog = ({
   }, [handleSave, tags]);
 
   const handleCreateNewTag = useCallback(() => {
-    setIsCreateNewTag(false);
+    if (newTagLabel) {
+      createNewTag(newTagLabel)
+        .then(() => {
+          setIsCreateNewTag(false);
+        })
+        .catch((e) => {
+          setCreateNewTagError(e);
+        });
+    }
+  }, [newTagLabel]);
+
+  const handleValueChange = (q: string) => {
+    if (!q) return Promise.resolve([]);
+
+    return getAllTags(q);
+  };
+
+  const handleAddTag = useCallback((item: SearchInputItem) => {
+    setTags((prev) => [...prev, item]);
   }, []);
+
+  const handleCreateAndAddTag = useCallback(() => {
+    if (newTagLabel) {
+      createNewTag(newTagLabel)
+        .then((tag: Tag) => {
+          setTags((prev) => [...prev, tag]);
+          setIsCreateNewTag(false);
+        })
+        .catch((e) => {
+          setCreateNewTagError(e);
+        });
+    }
+  }, [newTagLabel]);
 
   return (
     <Modal className={"p-6 w-2/4 h-3/5"} onClose={handleClose}>
@@ -41,7 +80,7 @@ export const TagAddDialog = ({
           <Heading className={"border-b mb-3"} level={"4"}>
             Find existing
           </Heading>
-          <SearchInput />
+          <SearchInput onSearch={handleValueChange} onSelect={handleAddTag} />
           <Heading className={"border-b mb-3"} level={"4"}>
             Create New
           </Heading>
@@ -55,7 +94,14 @@ export const TagAddDialog = ({
               </Button>
             ) : (
               <>
-                <input className={"p-2 border"} type={"text"} />
+                <input
+                  className={"p-2 border"}
+                  type={"text"}
+                  onChange={(e) => setNewTagLabel(e.target.value)}
+                />
+                {createNewTagError ? (
+                  <p className={"text-red-500"}>{createNewTagError}</p>
+                ) : null}
                 <Button
                   onClick={() => setIsCreateNewTag(false)}
                   color={"secondary"}
@@ -64,6 +110,9 @@ export const TagAddDialog = ({
                 </Button>
                 <Button color={"secondary"} onClick={handleCreateNewTag}>
                   Create new
+                </Button>
+                <Button color={"secondary"} onClick={handleCreateAndAddTag}>
+                  Create new and Add
                 </Button>
               </>
             )}
@@ -74,7 +123,7 @@ export const TagAddDialog = ({
             Current Tags
           </Heading>
           <div className={"flex flex-nowrap"}>
-            {currentTags.map((tag) => (
+            {tags.map((tag) => (
               <TagComp key={tag.id} tag={tag} onDeleteTag={handleDeleteTag} />
             ))}
           </div>

@@ -36,7 +36,7 @@ export const AdminInfo = ({ days, stats }: Props) => {
   const subscription = useRef<Socket | null>(null);
 
   const tileDisabled = ({ date, view }) => {
-    // Disable clicking on days
+    // Disable clicking on articles
     return view === "month" && date.getDate() !== new Date().getDate();
   };
 

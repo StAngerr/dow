@@ -1,3 +1,5 @@
+import { Tag } from "./tags";
+
 export interface CurrentDate {
   date: Date;
   dateStr: string;
@@ -16,4 +18,7 @@ export interface Article {
   time: string;
   title: string;
   url: string;
+  tags: Tag[];
 }
+
+export type ArticleDTO = Omit<Article, "tags"> & { tags: string[] };
