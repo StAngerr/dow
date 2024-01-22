@@ -38,7 +38,8 @@ export const JobsList = () => {
       tasks
         .sort(
           (taskA, taskB) =>
-            new Date(taskB.startedAt) - new Date(taskA.startedAt)
+            new Date(taskB.startedAt).valueOf() -
+            new Date(taskA.startedAt).valueOf()
         )
         .map((task: Task) => (
           <tr key={task.id}>

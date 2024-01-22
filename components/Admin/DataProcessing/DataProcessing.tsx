@@ -38,8 +38,9 @@ export const DataProcessing = () => {
 
   const stats: ProcessingStats = useMemo(() => {
     return {
-      processedArticles: articles.filter((i) => i.config && i.config.lastUpdate)
-        .length,
+      processedArticles: articles.filter(
+        (i: Article) => i.config && i.config.lastUpdate
+      ).length,
       totalArticles: articles.length,
     };
   }, [articles]);
@@ -50,7 +51,7 @@ export const DataProcessing = () => {
         setArticles(data)
       );
     }
-  }, [currentDate]);
+  }, [currentDate, days]);
 
   return (
     <div className="flex h-full flex-col">

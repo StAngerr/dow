@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
@@ -10,11 +10,14 @@ interface Props {
 }
 
 const Modal = ({ children, onClose, className, containerClassName }: Props) => {
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -44,7 +47,7 @@ const Modal = ({ children, onClose, className, containerClassName }: Props) => {
         {children}
       </div>
     </div>,
-    document.getElementById("modal-container")
+    document.getElementById("modal-container")!
   );
 };
 

@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { ButtonHTMLAttributes, useMemo } from "react";
 import classNames from "classnames";
 
 export type ButtonType = "primary" | "secondary" | "default" | "link";
 
-export interface Props extends React.HTMLProps<HTMLButtonElement> {
+export interface Props
+  extends React.HTMLProps<HTMLButtonElement | HTMLAnchorElement> {
   color?: ButtonType;
   children?: React.ReactNode;
   className?: string;
@@ -40,7 +41,7 @@ export const Button = ({
   if (color === "link") {
     return (
       <a
-        {...props}
+        {...(props as React.HTMLProps<HTMLAnchorElement>)}
         href={href || undefined}
         className={classNames(
           "text-link-default hover:text-link-hover transition-colors duration-300 ease-in-out",
@@ -56,7 +57,7 @@ export const Button = ({
 
   return (
     <button
-      {...props}
+      {...(props as React.HTMLProps<HTMLButtonElement>)}
       className={classNames(
         "transition-colors duration-300 ease-in-out",
         buttonClasses,

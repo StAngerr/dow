@@ -33,6 +33,7 @@ export const Tabs = ({ tabs, onChange }: Props) => {
             : "";
         return (
           <button
+            key={i.id}
             onClick={() => handleTabClick(i.id)}
             className={classNames(baseStyles, activeStyles)}
           >

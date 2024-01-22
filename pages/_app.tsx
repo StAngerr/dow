@@ -5,7 +5,9 @@ import React, { useEffect } from "react";
 import Socket from "../socket";
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => Socket.init(), []);
+  useEffect(() => {
+    Socket.init();
+  }, []);
 
   return (
     <>

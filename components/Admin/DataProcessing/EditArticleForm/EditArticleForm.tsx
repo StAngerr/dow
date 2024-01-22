@@ -136,7 +136,7 @@ export const EditArticleForm = ({ article }: Props) => {
             <span className={"w-2/5 text-xl align-middle  mr-4 "}>Visible</span>
             <Field
               name={"visible"}
-              component={ToggleSwitch}
+              component={ToggleSwitch<Article>}
               label={"Visible"}
             />
           </label>

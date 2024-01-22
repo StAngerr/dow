@@ -35,7 +35,7 @@ export const AdminInfo = ({ days, stats }: Props) => {
   const [currentView, setCurrentView] = useState("1");
   const subscription = useRef<Socket | null>(null);
 
-  const tileDisabled = ({ date, view }) => {
+  const tileDisabled = ({ date, view }: CalendarTileProperties) => {
     // Disable clicking on articles
     return view === "month" && date.getDate() !== new Date().getDate();
   };
@@ -53,6 +53,7 @@ export const AdminInfo = ({ days, stats }: Props) => {
     if (view === "month" && days.includes(format(date, DEFAULT_DATE_FORMAT))) {
       return "!bg-green-500";
     }
+    return "";
   };
 
   const handleWSMessage = useCallback(
@@ -134,6 +135,8 @@ export const AdminInfo = ({ days, stats }: Props) => {
 
   useEffect(() => {
     if (!subscription.current) {
+      //TODO
+      // @ts-ignore
       subscription.current = SocketWrap.getInstance()?.onAny((msg, data) =>
         handleWSMessage(msg, data)
       );
