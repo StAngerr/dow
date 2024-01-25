@@ -62,11 +62,7 @@ export const JobsList = () => {
   );
 
   useEffect(() => {
-    fetch(allTasks).then((res) => {
-      res.json().then((data) => {
-        setTasks(data);
-      });
-    });
+    fetch(allTasks).then((res) => res.json().then((data) => setTasks(data)));
   }, []);
 
   return (

@@ -18,7 +18,7 @@ import { useAtom } from "jotai";
 import { tasksAtom } from "../../atoms/tasks.atom";
 import SocketWrap from "../../socket";
 import { Socket } from "socket.io-client";
-import { articlesAtom } from "../../atoms/articles.atom";
+import { daysAtom } from "../../atoms/daysAtom";
 import { Tab, Tabs } from "../../components/common/Tabs/Tabs";
 import { DataProcessing } from "../../components/Admin/DataProcessing/DataProcessing";
 
@@ -31,8 +31,8 @@ interface Props {
 }
 export const AdminInfo = ({ days, stats }: Props) => {
   const [tasks, setTasks] = useAtom(tasksAtom);
-  const [, setDays] = useAtom(articlesAtom);
-  const [currentView, setCurrentView] = useState("1");
+  const [dd, setDays] = useAtom(daysAtom);
+  const [currentView, setCurrentView] = useState("3");
   const subscription = useRef<Socket | null>(null);
 
   const tileDisabled = ({ date, view }: CalendarTileProperties) => {
@@ -123,7 +123,13 @@ export const AdminInfo = ({ days, stats }: Props) => {
       default:
         return null;
     }
-  }, [stats, tileDisabled, tileClassName, handleRunNewTask]);
+  }, [
+    currentView,
+    stats.totalFilledDays,
+    stats.totalDays,
+    tileClassName,
+    handleRunNewTask,
+  ]);
 
   useEffect(() => {
     // TODO: why unmount here
@@ -131,7 +137,10 @@ export const AdminInfo = ({ days, stats }: Props) => {
     return () => console.log("Admin root unmount");
   }, []);
 
-  useEffect(() => setDays(days), [days]);
+  useEffect(() => {
+    setDays(days);
+    console.log("useEffect with days set");
+  }, [days]);
 
   useEffect(() => {
     if (!subscription.current) {
@@ -149,10 +158,10 @@ export const AdminInfo = ({ days, stats }: Props) => {
       }
     };
   }, [handleWSMessage, subscription.current]);
-
+  // console.log(dd);
   return (
     <div className={"p-5 h-full flex flex-col"}>
-      <Tabs onChange={setCurrentView} tabs={tabs} />
+      <Tabs defaultSelected={"3"} onChange={setCurrentView} tabs={tabs} />
       {currentTabContent}
     </div>
   );

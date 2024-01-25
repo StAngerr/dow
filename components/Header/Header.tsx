@@ -17,7 +17,7 @@ export const Header = () => {
             </a>
           </li>
           <li>
-            <Link href={"/archive/2023-01-15"}>
+            <Link href={"/archive/2024-01-11"}>
               <span className="hover:underline">Archive</span>
             </Link>
           </li>

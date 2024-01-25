@@ -18,6 +18,15 @@ interface DeleteSelectBtnProps {
   onClick: () => void;
 }
 
+const isCurrentDate = (date: Date) => {
+  const currentDate = new Date();
+  return (
+    date.getDate() === currentDate.getDate() &&
+    date.getMonth() === currentDate.getMonth() &&
+    date.getFullYear() === currentDate.getFullYear()
+  );
+};
+
 export const SearchPanel = ({
   currentDate,
   className,
@@ -45,6 +54,9 @@ export const SearchPanel = ({
         <DatePicker
           selected={currentDate}
           onChange={handleDateChange}
+          dayClassName={(date) =>
+            isCurrentDate(date) ? "border border-solid border-red-500" : ""
+          }
           customInput={
             <DateSelectBtn
               value={"Delete"}

@@ -9,10 +9,11 @@ export interface Tab {
 interface Props {
   tabs: Tab[];
   onChange: (tabId: string) => void;
+  defaultSelected?: string;
 }
 
-export const Tabs = ({ tabs, onChange }: Props) => {
-  const [active, setActive] = useState(tabs[0].id);
+export const Tabs = ({ tabs, onChange, defaultSelected }: Props) => {
+  const [active, setActive] = useState(defaultSelected || tabs[0].id);
 
   const handleTabClick = useCallback(
     (id: string) => {

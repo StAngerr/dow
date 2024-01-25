@@ -13,12 +13,13 @@ export interface Article {
   date: string;
   fullDate: string;
   id: string;
-  level: 4;
+  level: number;
   source: string;
   time: string;
   title: string;
+  visible: boolean;
   url: string;
   tags: Tag[];
 }
 
-export type ArticleDTO = Omit<Article, "tags"> & { tags: string[] };
+export type ArticleDTO = Omit<Article, "tags"> & { tags: Tag[] };

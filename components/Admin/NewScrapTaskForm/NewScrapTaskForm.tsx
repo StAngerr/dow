@@ -6,7 +6,7 @@ import { Heading } from "../../common/Heading/Heading";
 import { format } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../../constants";
 import { useAtom } from "jotai";
-import { articlesAtom } from "../../../atoms/articles.atom";
+import { daysAtom } from "../../../atoms/daysAtom";
 import classNames from "classnames";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const NewScrapTaskForm = ({ onCreateNewTask }: Props) => {
-  const [days] = useAtom(articlesAtom);
+  const [days] = useAtom(daysAtom);
   const [isOpened, setIsOpened] = useState(false);
   const [selectedRange, setSelectedRange] = useState<[Date, Date] | null>(null);
 

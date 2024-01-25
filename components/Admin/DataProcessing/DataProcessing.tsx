@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Heading } from "../../common/Heading/Heading";
 import { useAtom } from "jotai";
-import { articlesAtom } from "../../../atoms/articles.atom";
+import { daysAtom } from "../../../atoms/daysAtom";
 import { addDays, format, subDays } from "date-fns";
 import { DEFAULT_DATE_FORMAT } from "../../../constants";
 import { getArticlesByDate } from "../../../api/articles/articles.api";
@@ -16,9 +16,11 @@ import { Article } from "../../../types";
 interface Props {}
 
 export const DataProcessing = () => {
-  const [days] = useAtom(articlesAtom);
+  const [days] = useAtom(daysAtom);
   const [articles, setArticles] = useState<Article[]>([]);
-  const [currentDate, setCurrentDate] = useState(days[days.length - 1]);
+  const [currentDate, setCurrentDate] = useState(
+    format(new Date(), DEFAULT_DATE_FORMAT)
+  );
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   //TODO: add min first day of war
@@ -38,9 +40,11 @@ export const DataProcessing = () => {
 
   const stats: ProcessingStats = useMemo(() => {
     return {
-      processedArticles: articles.filter(
-        (i: Article) => i.config && i.config.lastUpdate
-      ).length,
+      // TODO: fix statistics
+      processedArticles: 0,
+      // articles.filter(
+      //   (i: Article) => i.config && i.config.lastUpdate
+      // ).length,
       totalArticles: articles.length,
     };
   }, [articles]);
@@ -52,6 +56,10 @@ export const DataProcessing = () => {
       );
     }
   }, [currentDate, days]);
+
+  useEffect(() => {
+    setCurrentDate(days[days.length - 1]);
+  }, [days]);
 
   return (
     <div className="flex h-full flex-col">
@@ -74,10 +82,11 @@ export const DataProcessing = () => {
 
       <div className={"flex grow overflow-y-hidden"}>
         <ArticlesTable
+          selectedId={selectedArticle?.id}
           articles={articles}
           handleRowSelected={setSelectedArticle}
         />
-        <EditArticleForm article={selectedArticle} />
+        {selectedArticle && <EditArticleForm article={selectedArticle} />}
       </div>
     </div>
   );
